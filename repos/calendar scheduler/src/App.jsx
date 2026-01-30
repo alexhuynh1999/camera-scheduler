@@ -146,12 +146,47 @@ function App() {
     }
   }
 
-  const changeMonth = (offset) => {
+  const navigateDate = (direction) => {
     setCurrentDate(prev => {
       const d = new Date(prev)
-      d.setMonth(d.getMonth() + offset)
+      if (view === 'month') {
+        d.setMonth(d.getMonth() + direction)
+      } else if (view === 'week') {
+        d.setDate(d.getDate() + (direction * 7))
+      } else if (view === '3day') {
+        d.setDate(d.getDate() + (direction * 3))
+      }
       return d
     })
+  }
+
+  const getHeaderTitle = () => {
+    const year = currentDate.getFullYear()
+    const month = currentDate.toLocaleString('default', { month: 'long' })
+
+    if (view === 'month') {
+      return `${month} ${year}`
+    }
+
+    // Calculate range for Week or 3 Day
+    const start = new Date(currentDate)
+    if (view === 'week') {
+      const day = start.getDay()
+      start.setDate(start.getDate() - day)
+    }
+
+    const end = new Date(start)
+    const daysToAdd = view === 'week' ? 6 : 2 // 7 days total or 3 days total
+    end.setDate(start.getDate() + daysToAdd)
+
+    const startMonth = start.toLocaleString('default', { month: 'short' })
+    const endMonth = end.toLocaleString('default', { month: 'short' })
+
+    if (startMonth === endMonth) {
+      return `${startMonth} ${start.getDate()} - ${end.getDate()}`
+    } else {
+      return `${startMonth} ${start.getDate()} - ${endMonth} ${end.getDate()}`
+    }
   }
 
   return (
@@ -171,7 +206,10 @@ function App() {
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Scheduler</h1>
+          <div className="flex items-center gap-2">
+            <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Scheduler</h1>
+            <span className="px-1.5 py-0.5 rounded-md bg-indigo-50 text-[10px] font-bold text-indigo-400 border border-indigo-100">v1.1</span>
+          </div>
           {/* Close button for mobile */}
           <button
             onClick={() => setIsSidebarOpen(false)}
@@ -208,6 +246,39 @@ function App() {
 
           <Summary bookings={bookings} users={users} filterUserIds={filterUserIds} />
         </div>
+
+        {/* Admin Reset */}
+        <div className="mt-8 pt-6 border-t border-gray-100">
+          <button
+            onClick={async () => {
+              const password = prompt("Enter admin password to reset all data:")
+              if (password === "camelcamel") {
+                if (confirm("Are you ABSOLUTELY sure? This will delete ALL users and bookings permanently.")) {
+                  try {
+                    // Delete all bookings
+                    for (const dateStr of Object.keys(bookings)) {
+                      await deleteDoc(doc(db, 'bookings', dateStr))
+                    }
+                    // Delete all users
+                    for (const user of users) {
+                      await deleteDoc(doc(db, 'users', user.id))
+                    }
+                    // State updates will happen automatically via onSnapshot
+                  } catch (e) {
+                    console.error("Error resetting data:", e)
+                    alert("Error deleting data. Check console.")
+                  }
+                }
+              } else if (password !== null) {
+                alert("Incorrect password")
+              }
+            }}
+            className="w-full py-2 px-4 bg-red-50 text-red-600 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-red-100 hover:text-red-700 transition-colors border border-red-100 flex items-center justify-center space-x-2"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+            <span>Reset Application</span>
+          </button>
+        </div>
       </aside>
 
       {/* Main Content */}
@@ -224,38 +295,61 @@ function App() {
 
             <div className="flex items-center space-x-1">
               <button
-                onClick={() => changeMonth(-1)}
+                onClick={() => navigateDate(-1)}
                 className="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-indigo-600 transition-colors"
-                aria-label="Previous Month"
+                aria-label="Previous"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
               </button>
               <button
-                onClick={() => changeMonth(1)}
+                onClick={() => navigateDate(1)}
                 className="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-indigo-600 transition-colors"
-                aria-label="Next Month"
+                aria-label="Next"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
               </button>
             </div>
-            <h2 className="text-xl font-semibold w-48 text-center select-none">
-              {currentDate.toLocaleString('default', { month: 'long', year: 'numeric' })}
+            <h2 className="text-sm md:text-xl font-semibold min-w-32 md:min-w-48 text-center select-none truncate">
+              {getHeaderTitle()}
             </h2>
           </div>
 
           <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
-            {['month', 'week', '3day'].map((v) => (
-              <button
-                key={v}
-                onClick={() => setView(v)}
-                className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${view === v
-                  ? 'bg-white text-indigo-600 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
-                  }`}
+            {/* Mobile Dropdown */}
+            <div className="md:hidden relative">
+              <select
+                value={view}
+                onChange={(e) => setView(e.target.value)}
+                className="appearance-none bg-white text-indigo-600 text-sm font-semibold py-1.5 pl-3 pr-8 rounded-md shadow-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                {v.charAt(0).toUpperCase() + v.slice(1)}
-              </button>
-            ))}
+                <option value="month">Month</option>
+                <option value="week">Week</option>
+                <option value="3day">3 Days</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-indigo-600">
+                <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
+              </div>
+            </div>
+
+            {/* Desktop Buttons */}
+            <div className="hidden md:flex space-x-1">
+              {[
+                { id: 'month', label: 'Month' },
+                { id: 'week', label: 'Week' },
+                { id: '3day', label: '3 Days' }
+              ].map((v) => (
+                <button
+                  key={v.id}
+                  onClick={() => setView(v.id)}
+                  className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${view === v.id
+                    ? 'bg-white text-indigo-600 shadow-sm'
+                    : 'text-gray-500 hover:text-gray-700'
+                    }`}
+                >
+                  {v.label}
+                </button>
+              ))}
+            </div>
           </div>
         </header>
 
