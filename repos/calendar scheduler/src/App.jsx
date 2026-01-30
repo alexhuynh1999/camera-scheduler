@@ -26,7 +26,7 @@ function App() {
   const [bookings, setBookings] = useState({})
 
   const [filterUserIds, setFilterUserIds] = useState([])
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
 
   // Close mobile sidebar on resize
   useEffect(() => {
@@ -150,7 +150,8 @@ function App() {
     setCurrentDate(prev => {
       const d = new Date(prev)
       if (view === 'month') {
-        d.setMonth(d.getMonth() + direction)
+        // Set to 1st of the target month to avoid overflow (Jan 31 -> Feb 28/Mar 2)
+        d.setMonth(d.getMonth() + direction, 1)
       } else if (view === 'week') {
         d.setDate(d.getDate() + (direction * 7))
       } else if (view === '3day') {
@@ -208,7 +209,7 @@ function App() {
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Scheduler</h1>
-            <span className="px-1.5 py-0.5 rounded-md bg-indigo-50 text-[10px] font-bold text-indigo-400 border border-indigo-100">v1.1</span>
+            <span className="px-1.5 py-0.5 rounded-md bg-indigo-50 text-[10px] font-bold text-indigo-400 border border-indigo-100">v1.1.1</span>
           </div>
           {/* Close button for mobile */}
           <button
