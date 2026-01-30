@@ -26,6 +26,16 @@ function App() {
   const [bookings, setBookings] = useState({})
 
   const [filterUserIds, setFilterUserIds] = useState([])
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+
+  // Close mobile sidebar on resize
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) setIsSidebarOpen(false)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   // --- Real-time Subscriptions ---
 
@@ -145,10 +155,31 @@ function App() {
   }
 
   return (
-    <div className="flex h-screen bg-gray-50 text-gray-800 font-sans">
+    <div className="flex h-screen bg-gray-50 text-gray-800 font-sans overflow-hidden">
+      {/* Mobile Backdrop */}
+      {isSidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 md:hidden"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className="w-80 bg-white shadow-xl flex flex-col p-6 z-20 overflow-y-auto border-r border-gray-100">
-        <h1 className="text-2xl font-black mb-8 text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Scheduler</h1>
+      <aside className={`
+        fixed inset-y-0 left-0 z-50 w-80 bg-white shadow-xl flex flex-col p-6 border-r border-gray-100 transition-transform duration-300 ease-in-out
+        md:relative md:translate-x-0
+        ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+      `}>
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Scheduler</h1>
+          {/* Close button for mobile */}
+          <button
+            onClick={() => setIsSidebarOpen(false)}
+            className="md:hidden p-1 text-gray-400 hover:text-gray-600"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
 
         <div className="mb-8">
           <UserEntry
@@ -182,8 +213,15 @@ function App() {
       {/* Main Content */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {/* Header / Toolbar */}
-        <header className="flex items-center justify-between px-8 py-5 bg-white border-b border-gray-200">
+        <header className="flex items-center justify-between px-4 md:px-8 py-5 bg-white border-b border-gray-200">
           <div className="flex items-center space-x-4">
+            <button
+              onClick={() => setIsSidebarOpen(true)}
+              className="md:hidden p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-md"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
+            </button>
+
             <div className="flex items-center space-x-1">
               <button
                 onClick={() => changeMonth(-1)}
@@ -211,8 +249,8 @@ function App() {
                 key={v}
                 onClick={() => setView(v)}
                 className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${view === v
-                    ? 'bg-white text-indigo-600 shadow-sm'
-                    : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-indigo-600 shadow-sm'
+                  : 'text-gray-500 hover:text-gray-700'
                   }`}
               >
                 {v.charAt(0).toUpperCase() + v.slice(1)}

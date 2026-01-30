@@ -50,8 +50,9 @@ export function MonthView({ currentDate, bookings, bookingsMap, onDateClick, use
             {/* Weekday Headers */}
             <div className="grid grid-cols-7 mb-2">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-                    <div key={d} className="text-center text-xs font-semibold text-gray-400 uppercase tracking-wider py-2">
-                        {d}
+                    <div key={d} className="text-center text-[10px] md:text-xs font-semibold text-gray-400 uppercase tracking-wider py-2">
+                        <span className="md:hidden">{d.charAt(0)}</span>
+                        <span className="hidden md:block">{d}</span>
                     </div>
                 ))}
             </div>
@@ -67,12 +68,12 @@ export function MonthView({ currentDate, bookings, bookingsMap, onDateClick, use
                             key={idx}
                             onClick={() => onDateClick(dateStr)}
                             className={`
-                            relative p-1 rounded-xl border transition-all cursor-pointer flex flex-col items-start justify-start overflow-hidden group
+                            relative p-0.5 md:p-1 rounded-lg md:rounded-xl border transition-all cursor-pointer flex flex-col items-start justify-start overflow-hidden group
                             ${dayObj.isCurrentMonth ? 'bg-white border-gray-100' : 'bg-gray-50 border-transparent text-gray-300'}
-                            ${isToday(dayObj.date) ? 'ring-2 ring-indigo-500 ring-offset-2 z-10' : 'hover:border-indigo-200 hover:shadow-md'}
+                            ${isToday(dayObj.date) ? 'ring-2 ring-indigo-500 ring-offset-1 md:ring-offset-2 z-10' : 'hover:border-indigo-200 hover:shadow-md'}
                         `}
                         >
-                            <span className={`text-sm font-semibold ml-1 mt-1 ${isToday(dayObj.date) ? 'text-indigo-600' : 'text-gray-700'}`}>
+                            <span className={`text-[10px] md:text-sm font-semibold ml-1 mt-0.5 md:mt-1 ${isToday(dayObj.date) ? 'text-indigo-600' : 'text-gray-700'}`}>
                                 {dayObj.date.getDate()}
                             </span>
 
@@ -84,7 +85,7 @@ export function MonthView({ currentDate, bookings, bookingsMap, onDateClick, use
                                     return (
                                         <div
                                             key={uid}
-                                            className="h-2 w-2 rounded-full"
+                                            className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full"
                                             style={{ backgroundColor: user.color }}
                                             title={user.name}
                                         />
