@@ -1,10 +1,12 @@
-import { useState, useEffect, useLayoutEffect } from 'react'
+import { useState, useEffect, useLayoutEffect, useRef } from 'react'
 
 export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepChange }) {
     const [step, setStep] = useState(0)
     const [mainTourStep, setMainTourStep] = useState(0)
     const [targetRect, setTargetRect] = useState(null)
     const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+    const [bubbleHeight, setBubbleHeight] = useState(0) // Start with 0 or auto to measure
+    const bubbleRef = useRef(null)
 
     // Handle window resizing
     useEffect(() => {
@@ -94,6 +96,13 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
     const steps = isAddUserTour ? addUserSteps : mainTourSteps
     const currentStep = steps[step] || steps[0]
 
+    useLayoutEffect(() => {
+        if (bubbleRef.current) {
+            setBubbleHeight(bubbleRef.current.offsetHeight)
+        }
+    }, [step, currentStep, isMobile, targetRect])
+
+    // ... existing layout effect for targetRect ...
     // Use a layout effect to measure the target element
     useLayoutEffect(() => {
         if (!isOpen || !currentStep) return
@@ -115,6 +124,10 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
                     return prev
                 })
             }
+            // Also update bubble height if it changes due to content reflow
+            if (bubbleRef.current && bubbleRef.current.offsetHeight !== bubbleHeight) {
+                setBubbleHeight(bubbleRef.current.offsetHeight)
+            }
             animationFrameId = requestAnimationFrame(updateTarget)
         }
 
@@ -122,9 +135,11 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
         return () => {
             if (animationFrameId) cancelAnimationFrame(animationFrameId)
         }
-    }, [step, isOpen, currentStep])
+    }, [step, isOpen, currentStep, bubbleHeight]) // Added bubbleHeight dependency slightly risky loop? No, check only updates if diff.
 
     if (!isOpen || !currentStep) return null
+
+    // ... handlers ...
 
     const handleNext = () => {
         const isAddUserTour = isOpen === 'add-user'
@@ -139,7 +154,6 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
             }
         } else {
             if (isAddUserTour) {
-                // Return to Step 2 of main tour
                 setMainTourStep(2)
                 setOpen('main')
                 if (onStepChange) onStepChange(2, false)
@@ -169,7 +183,6 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
     const r = 16 // borderRadius
     const rect = targetRect || { top: 0, left: 0, width: 0, height: 0, right: 0, bottom: 0 }
 
-    // Precise coordinates for SVG mask
     const x = rect.left - padding
     const y = rect.top - padding
     const w = rect.width + padding * 2
@@ -177,7 +190,6 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
 
     return (
         <div className="fixed inset-0 z-[100] overflow-hidden pointer-events-none">
-            {/* SVG Mask Backdrop */}
             <svg className="fixed inset-0 w-full h-full pointer-events-auto">
                 <defs>
                     <mask id="tutorial-mask">
@@ -207,7 +219,6 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
                 />
             </svg>
 
-            {/* Red highlight box */}
             {targetRect && (
                 <div
                     className="fixed z-[105] border-[3px] border-red-500 rounded-xl shadow-[0_0_40px_rgba(239,68,68,0.3)] transition-all duration-300 pointer-events-none"
@@ -220,16 +231,15 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
                 />
             )}
 
-            {/* Speech Bubble */}
             {targetRect && (
                 <div
+                    ref={bubbleRef}
                     className="fixed z-[120] animate-in fade-in zoom-in duration-300 pointer-events-auto"
                     style={{
-                        ...getBubblePosition(rect, currentStep.position, isMobile, padding)
+                        ...getBubblePosition(rect, currentStep.position, isMobile, padding, bubbleHeight)
                     }}
                 >
-                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 relative border-2 border-indigo-50">
-                        {/* Arrow */}
+                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 relative border-2 border-indigo-50 max-h-[80vh] overflow-y-auto no-scrollbar">
                         <div className={`absolute border-8 border-transparent ${getArrowClass(currentStep.position, isMobile)}`} />
 
                         <div className="flex justify-between items-start mb-3">
@@ -242,6 +252,7 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
                         <h3 className="text-xl font-black text-gray-800 mb-2 leading-tight">
                             {currentStep.title}
                         </h3>
+                        {/* ... content ... */}
                         <div className="text-gray-500 text-sm mb-8 leading-relaxed">
                             {isAddUserTour ? currentStep.description : (
                                 step === 1 ? (
@@ -290,10 +301,10 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
     )
 }
 
-function getBubblePosition(rect, position, isMobile, padding) {
+function getBubblePosition(rect, position, isMobile, padding, measuredHeight) {
     const margin = 28
     const bubbleWidth = 320
-    const bubbleHeight = 220 // Safer estimate
+    const bubbleHeight = measuredHeight || 300 // Use measured or default to safer larger
 
     let pos = {}
 
@@ -322,15 +333,34 @@ function getBubblePosition(rect, position, isMobile, padding) {
         }
     }
 
-    // Safety clamping (prevent off-edge)
-    if (pos.top !== undefined) {
-        pos.top = Math.max(10, Math.min(pos.top, window.innerHeight - bubbleHeight - 10))
-    }
-    if (pos.bottom !== undefined) {
-        if (window.innerHeight - pos.bottom - bubbleHeight < 10) {
-            delete pos.bottom
-            pos.top = 10
+    // Strict clamping to viewport
+    // Convert bottom-aligned to top-aligned for bounding check if needed, or check bounds directly
+
+    // 1. Calculate prospective top/bottom
+    let top = pos.top
+    let bottom = pos.bottom // this is distance from bottom
+
+    if (top !== undefined) {
+        // Clamp top
+        top = Math.max(10, top)
+        // Check overflow bottom
+        if (top + bubbleHeight > window.innerHeight - 10) {
+            // Shift up
+            top = Math.max(10, window.innerHeight - bubbleHeight - 10)
         }
+        pos.top = top
+    }
+
+    // If positioned by 'bottom'
+    if (bottom !== undefined) {
+        // Clamp "bottom" (distance from bottom) so it doesn't go off top
+        // bottom + height > windowHeight => clipped at top
+        if (bottom + bubbleHeight > window.innerHeight - 10) {
+            // Shift down (reduce distance from bottom)
+            bottom = Math.max(10, window.innerHeight - bubbleHeight - 10)
+        }
+        bottom = Math.max(10, bottom)
+        pos.bottom = bottom
     }
 
     if (pos.left !== undefined) {

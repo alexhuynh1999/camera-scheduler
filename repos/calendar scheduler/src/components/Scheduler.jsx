@@ -101,8 +101,12 @@ export function Scheduler() {
     const handleTutorialStepChange = (step, isAddUserTour) => {
         const isMobile = window.innerWidth < 768
         if (!isMobile) return
-        if (!isAddUserTour && step === 2) setSidebarOpen(false)
-        else if (!isAddUserTour && step >= 3) setSidebarOpen(true)
+
+        if (!isAddUserTour && step === 2) {
+            setSidebarOpen(false)
+        } else {
+            setSidebarOpen(true)
+        }
     }
 
     const handleCopyLink = () => {
