@@ -53,40 +53,38 @@ export function Sidebar({ eventData, eventCode, handleCopyLink }) {
                 </button>
             </div>
 
-            <div className="mb-6">
-                <button
-                    id="tutorial-button"
-                    onClick={() => setTutorialOpen(true)}
-                    className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-all border border-indigo-100 group shadow-sm mb-2"
-                >
-                    <svg className="w-4 h-4 text-indigo-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                    <span className="text-sm">How do I use this?</span>
-                </button>
-            </div>
-
-            <div id="user-section" className="mb-8">
-                <UserEntry />
-            </div>
-
-            <div id="summary-section" className="flex-1 overflow-y-auto min-h-0">
-                <div className="flex items-center justify-between mb-3">
-                    <h2 className="text-xs uppercase tracking-wider text-gray-400 font-bold">Summary</h2>
-                    <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Filter</span>
+            <div className="flex-1 overflow-y-auto no-scrollbar -mx-6 px-6 min-h-0">
+                <div className="mb-6">
+                    <button
+                        id="tutorial-button"
+                        onClick={() => setTutorialOpen(true)}
+                        className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-all border border-indigo-100 group shadow-sm mb-2"
+                    >
+                        <svg className="w-4 h-4 text-indigo-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span className="text-sm">How do I use this?</span>
+                    </button>
                 </div>
 
-                <div className="mb-4">
-                    <FilterMultiSelect
-                        users={users} // Pass users to FilterMultiSelect since I decided to keep it dumb for now? Wait, my previous plan said "keep it dumb". 
-                        // But I need to check FilterMultiSelect refactor status.
-                        // I viewed it but didn't refactor it yet.
-                        // FilterMultiSelect expects `users`.
-                        // Sidebar has `users`, so passing it is correct.
-                        selectedUserIds={filterUserIds}
-                        onChange={setFilterUserIds}
-                    />
+                <div id="user-section" className="mb-8">
+                    <UserEntry />
                 </div>
 
-                <Summary filterUserIds={filterUserIds} />
+                <div id="summary-section" className="mb-4">
+                    <div className="flex items-center justify-between mb-3">
+                        <h2 className="text-xs uppercase tracking-wider text-gray-400 font-bold">Summary</h2>
+                        <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded">Filter</span>
+                    </div>
+
+                    <div className="mb-4">
+                        <FilterMultiSelect
+                            users={users}
+                            selectedUserIds={filterUserIds}
+                            onChange={setFilterUserIds}
+                        />
+                    </div>
+
+                    <Summary filterUserIds={filterUserIds} />
+                </div>
             </div>
         </aside>
     )

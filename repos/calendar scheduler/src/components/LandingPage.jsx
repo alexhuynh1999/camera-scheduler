@@ -87,7 +87,7 @@ export function LandingPage() {
                     <div className="text-xs text-gray-400 font-medium">
                         No sign-up required. Just create and share the link.
                     </div>
-                    <span className="px-2 py-0.5 rounded-md bg-gray-50 text-[10px] font-bold text-gray-300 border border-gray-100">v1.3.0</span>
+                    <span className="px-2 py-0.5 rounded-md bg-gray-50 text-[10px] font-bold text-gray-300 border border-gray-100">v1.4.0</span>
                 </div>
             </div>
         </div>
