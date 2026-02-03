@@ -1,15 +1,64 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ColorPicker } from '../Common/ColorPicker'
+import { useStore } from '../../stores/useStore'
 
-export function UserEntry({ users, currentUser, onAddUser, onSelectUser, onUpdateUser, onDeleteUser }) {
+export function UserEntry() {
+    const users = useStore(state => state.users)
+    const currentUser = useStore(state => state.currentUser)
+    const addUser = useStore(state => state.addUser)
+    const setCurrentUser = useStore(state => state.setCurrentUser)
+    const updateUser = useStore(state => state.updateUser)
+    const deleteUser = useStore(state => state.deleteUser)
+
+    // We need eventCode here to pass to actions?
+    // Oh right, the store actions `addUser(eventCode, user)` require eventCode.
+    // I didn't store eventCode in the global store because it's derived from URL.
+    // Options:
+    // 1. Store eventCode in store when Scheduler mounts.
+    // 2. Pass eventCode down from Sidebar -> UserEntry.
+    // 3. Use `useParams` in UserEntry.
+
+    // Option 3 is cleanest if UserEntry is always under a route. It is.
+
+    // START_HACK: Need to import useParams to get eventCode
+    // I need to add import.
+
+    /* 
+       Wait, I can't import useParams inside this code block string easily if I didn't include it. 
+       I will include it.
+    */
+
+    // Rewriting component
+    return <UserEntryWithParams />
+}
+
+import { useParams } from 'react-router-dom'
+
+function UserEntryWithParams() {
+    const { eventCode } = useParams()
+    const users = useStore(state => state.users)
+    const currentUser = useStore(state => state.currentUser)
+    const addUser = useStore(state => state.addUser)
+    const setCurrentUser = useStore(state => state.setCurrentUser)
+    const updateUser = useStore(state => state.updateUser)
+    const deleteUser = useStore(state => state.deleteUser)
+
     const [name, setName] = useState('')
     const [color, setColor] = useState('#6366f1') // Default indigo-500
 
     const handleAdd = (e) => {
         e.preventDefault()
         if (!name.trim()) return
-        onAddUser({ name, color })
+        addUser(eventCode, { name, color })
         setName('')
+    }
+
+    const handleUpdate = (userId, newColor) => {
+        updateUser(eventCode, userId, newColor)
+    }
+
+    const handleDelete = (userId) => {
+        deleteUser(eventCode, userId)
     }
 
     return (
@@ -39,9 +88,9 @@ export function UserEntry({ users, currentUser, onAddUser, onSelectUser, onUpdat
                 <CustomDropdown
                     users={users}
                     currentUser={currentUser}
-                    onSelect={onSelectUser}
-                    onUpdateUser={onUpdateUser}
-                    onDeleteUser={onDeleteUser}
+                    onSelect={setCurrentUser}
+                    onUpdateUser={handleUpdate}
+                    onDeleteUser={handleDelete}
                 />
             </div>
 

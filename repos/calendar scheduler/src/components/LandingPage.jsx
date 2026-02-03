@@ -1,43 +1,26 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { db } from '../firebase'
-import { doc, setDoc } from 'firebase/firestore'
 import { Toast } from './Common/Toast'
+import { useStore } from '../stores/useStore'
 
 export function LandingPage() {
     const navigate = useNavigate()
     const [eventName, setEventName] = useState('')
     const [isCreating, setIsCreating] = useState(false)
-    const [toast, setToast] = useState(null)
-
-    const generateCode = () => {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-        const array = new Uint32Array(6)
-        window.crypto.getRandomValues(array)
-        let result = ''
-        for (let i = 0; i < 6; i++) {
-            result += chars.charAt(array[i] % chars.length)
-        }
-        return result
-    }
+    const toast = useStore(state => state.toast)
+    const setToast = useStore(state => state.setToast)
+    const createEvent = useStore(state => state.createEvent)
 
     const handleCreateEvent = async (e) => {
         e.preventDefault()
         if (!eventName.trim()) return
 
         setIsCreating(true)
-        const code = generateCode()
         try {
-            await setDoc(doc(db, 'events', code), {
-                name: eventName.trim(),
-                createdAt: new Date().toISOString(),
-                lastAccessedAt: new Date().toISOString(),
-                version: '1.4.0'
-            })
+            const code = await createEvent(eventName)
             navigate(`/${code}`)
         } catch (e) {
-            console.error("Error creating event:", e)
-            setToast({ message: "Failed to create event. Please try again.", type: 'error' })
+            // Error handled in store toast usually, but we can double check
         } finally {
             setIsCreating(false)
         }

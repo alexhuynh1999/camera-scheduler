@@ -1,6 +1,10 @@
 import { useMemo, useState, useEffect } from 'react'
+import { useStore } from '../../stores/useStore'
 
-export function Summary({ bookings, users, filterUserIds }) {
+export function Summary({ filterUserIds }) { // Accepts filters as props (or could use store if filters moved there)
+    const bookings = useStore(state => state.bookings)
+    const users = useStore(state => state.users)
+
     const [currentIndex, setCurrentIndex] = useState(0)
 
     // Basic stats logic
