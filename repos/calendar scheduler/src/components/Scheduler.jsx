@@ -195,7 +195,7 @@ export function Scheduler() {
                         </div>
                     </div>
                     <footer className="py-2 text-center bg-gray-50 border-t border-gray-100">
-                        <span className="text-[9px] font-bold text-gray-300 tracking-widest uppercase">Version 1.4.0</span>
+                        <span className="text-[9px] font-bold text-gray-300 tracking-widest uppercase">Version 1.5.1</span>
                     </footer>
                 </main>
             </main>

@@ -122,7 +122,7 @@ export const useStore = create((set, get) => ({
                 name: eventName.trim(),
                 createdAt: new Date().toISOString(),
                 lastAccessedAt: new Date().toISOString(),
-                version: '1.4.0'
+                version: '1.5.1'
             })
             return code
         } catch (e) {

@@ -11,9 +11,15 @@ export function Summary({ filterUserIds }) { // Accepts filters as props (or cou
     const stats = useMemo(() => {
         const counts = {}; // date -> Set(userIds)
 
-        // Count users per date
+        // Create a set of valid user IDs for quick lookup
+        const validUserIds = new Set(users.map(u => u.id));
+
+        // Count users per date, filtering out deleted users
         Object.entries(bookings).forEach(([date, userIds]) => {
-            counts[date] = new Set(userIds);
+            const validBookingIds = userIds.filter(id => validUserIds.has(id));
+            if (validBookingIds.length > 0) {
+                counts[date] = new Set(validBookingIds);
+            }
         });
 
         // Filter by required users if set
@@ -23,6 +29,7 @@ export function Summary({ filterUserIds }) { // Accepts filters as props (or cou
             eligibleDates = eligibleDates.filter(d => {
                 const dateUsers = counts[d];
                 // Check if ALL filter IDs are present in this date
+                // Note: filterUserIds should presumably only contain valid users since it selects from the list
                 return filterUserIds.every(requiredId => dateUsers.has(requiredId));
             });
         }
