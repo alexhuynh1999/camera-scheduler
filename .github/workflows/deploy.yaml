@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: github-pages
+      name: github-pages 
 
     steps:
       - name: Deploy to GitHub Pages
