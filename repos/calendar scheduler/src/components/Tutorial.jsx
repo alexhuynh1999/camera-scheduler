@@ -46,25 +46,24 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
             position: "right"
         },
         {
-            title: currentUser ? "Acting as User" : "Step 1: Create Profile",
+            title: currentUser ? "Acting as User" : "Create Profile",
             description: "", // Dynamically generated
             targetId: "user-section",
             position: "right"
         },
         {
-            title: "Step 2: Pick Your Dates",
-            description: "Just click on the calendar! Every click saves instantly. Your friends see your updates in real-time.",
+            title: "Pick Your Dates",
+            description: "Just click any dates on the calendar! Your friends see your updates in real-time.",
             targetId: "calendar-grid-container",
             position: "top"
         },
         {
-            title: "Step 3: Real-time Summary",
-            description: "Scroll down to see who else is available. Use filters to find the perfect overlap.",
-            targetId: "summary-section",
+            title: "Real-time Summary",
+            description: "Scroll down to see which date can accomodate the most people.",
             position: "right"
         },
         {
-            title: "Invite Everyone",
+            title: "Invite Friends",
             description: "Click here to copy the unique link. Send it to your group - no logins required!",
             targetId: "copy-link-button",
             position: "right"
@@ -79,7 +78,7 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
             position: "right"
         },
         {
-            title: "Pick a Brand Color",
+            title: "Pick a Color",
             description: "Choose a distinct color. This makes their availability stand out on the calendar.",
             targetId: "user-color-input",
             position: "right"
@@ -259,7 +258,7 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
                                     <div className="space-y-4">
                                         <p>
                                             {currentUser
-                                                ? `You are currently acting as ${activeUser?.name || 'a user'}. All dates you click will be saved under your name.`
+                                                ? `You are currently acting as ${activeUser?.name || 'a user'}. If you are not ${activeUser?.name || 'a user'}, you can either switch to another user or add a new user here.`
                                                 : "Enter your name and pick a color to start marking your availability."
                                             }
                                         </p>
