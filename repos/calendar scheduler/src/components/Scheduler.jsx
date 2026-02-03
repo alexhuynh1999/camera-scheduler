@@ -4,6 +4,7 @@ import { UserEntry } from './Sidebar/UserEntry'
 import { Summary } from './Sidebar/Summary'
 import { FilterMultiSelect } from './Sidebar/FilterMultiSelect'
 import { CalendarGrid } from './Calendar/CalendarGrid'
+import { Tutorial } from './Tutorial'
 import { db } from '../firebase'
 import { Toast } from './Common/Toast'
 import {
@@ -33,6 +34,7 @@ export function Scheduler() {
     const [isValidEvent, setIsValidEvent] = useState(true)
     const [eventData, setEventData] = useState(null)
     const [toast, setToast] = useState(null)
+    const [isTutorialOpen, setIsTutorialOpen] = useState(false)
 
     // Verify event existence and update lastAccessedAt
     useEffect(() => {
@@ -240,6 +242,13 @@ export function Scheduler() {
 
     return (
         <div className="flex h-screen bg-gray-50 text-gray-800 font-sans overflow-hidden">
+            {isTutorialOpen && (
+                <Tutorial
+                    isOpen={isTutorialOpen}
+                    onClose={() => setIsTutorialOpen(false)}
+                />
+            )}
+
             {toast && (
                 <Toast
                     message={toast.message}
@@ -284,6 +293,16 @@ export function Scheduler() {
                         className="md:hidden p-1 text-gray-400 hover:text-gray-600"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                </div>
+
+                <div className="mb-6">
+                    <button
+                        onClick={() => setIsTutorialOpen(true)}
+                        className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-all border border-indigo-100 group shadow-sm"
+                    >
+                        <svg className="w-4 h-4 text-indigo-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                        <span className="text-sm">How do I use this?</span>
                     </button>
                 </div>
 
