@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { formatDateKey } from '../../utils/dateUtils'
 
 export function MonthView({ currentDate, bookings, bookingsMap, onDateClick, users }) {
     // Logic to generate days
@@ -29,7 +30,11 @@ export function MonthView({ currentDate, bookings, bookingsMap, onDateClick, use
         }
 
         // Next month filler
-        const remainingSlots = 42 - calendarDays.length // 6 rows * 7 cols
+        const totalSlotsNeeded = Math.ceil(calendarDays.length / 7) * 7
+        // Ensure at least 4 rows for aesthetics, but don't force 6 if not needed
+        const finalSlots = Math.max(totalSlotsNeeded, 28)
+
+        const remainingSlots = finalSlots - calendarDays.length
         for (let i = 1; i <= remainingSlots; i++) {
             const d = new Date(year, month + 1, i)
             calendarDays.push({ date: d, isCurrentMonth: false })
@@ -60,7 +65,7 @@ export function MonthView({ currentDate, bookings, bookingsMap, onDateClick, use
             {/* Days Grid */}
             <div className="flex-1 grid grid-cols-7 gap-2 auto-rows-fr">
                 {days.map((dayObj, idx) => {
-                    const dateStr = dayObj.date.toISOString().split('T')[0]
+                    const dateStr = formatDateKey(dayObj.date)
                     const bookedUserIds = bookingsMap[dateStr] || []
 
                     return (

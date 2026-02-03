@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { ColorPicker } from '../Common/ColorPicker'
 
 export function UserEntry({ users, currentUser, onAddUser, onSelectUser, onUpdateUser, onDeleteUser }) {
     const [name, setName] = useState('')
@@ -50,6 +51,7 @@ export function UserEntry({ users, currentUser, onAddUser, onSelectUser, onUpdat
                 <div className="space-y-3">
                     <div>
                         <input
+                            id="user-name-input"
                             type="text"
                             value={name}
                             onChange={(e) => setName(e.target.value)}
@@ -58,13 +60,13 @@ export function UserEntry({ users, currentUser, onAddUser, onSelectUser, onUpdat
                         />
                     </div>
                     <div className="flex space-x-2">
-                        <input
-                            type="color"
-                            value={color}
-                            onChange={(e) => setColor(e.target.value)}
-                            className="h-9 w-12 p-0 border-0 rounded bg-transparent cursor-pointer"
+                        <ColorPicker
+                            id="user-color-input"
+                            color={color}
+                            onChange={setColor}
                         />
                         <button
+                            id="add-user-submit-button"
                             type="submit"
                             disabled={!name.trim()}
                             className="flex-1 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -84,6 +86,7 @@ function CustomDropdown({ users, currentUser, onSelect, onUpdateUser, onDeleteUs
     const [longPressTimer, setLongPressTimer] = useState(null);
     const [searchTerm, setSearchTerm] = useState('')
     const inputRef = useRef(null)
+    const contextMenuRef = useRef(null)
 
     const selectedUser = users.find(u => u.id === currentUser) || users[0]
 
@@ -130,7 +133,11 @@ function CustomDropdown({ users, currentUser, onSelect, onUpdateUser, onDeleteUs
 
     // Close menu when clicking outside
     useEffect(() => {
-        const handleClick = () => setContextMenu(null)
+        const handleClick = (e) => {
+            if (contextMenuRef.current && !contextMenuRef.current.contains(e.target)) {
+                setContextMenu(null)
+            }
+        }
         window.addEventListener('click', handleClick)
         return () => window.removeEventListener('click', handleClick)
     }, [])
@@ -200,26 +207,25 @@ function CustomDropdown({ users, currentUser, onSelect, onUpdateUser, onDeleteUs
             {/* Context Menu */}
             {contextMenu && (
                 <div
-                    className="fixed z-50 bg-white border border-gray-200 shadow-xl rounded-lg py-1 w-32 flex flex-col"
+                    ref={contextMenuRef}
+                    className="fixed z-50 bg-white border border-gray-200 shadow-xl rounded-lg py-1 w-48 flex flex-col"
                     style={{ top: contextMenu.y, left: contextMenu.x }}
                     onClick={(e) => e.stopPropagation()}
                 >
                     <div className="px-3 py-2 border-b border-gray-100 text-xs text-gray-400 font-bold uppercase tracking-wider">
                         Options
                     </div>
-                    <label className="flex items-center px-3 py-2 hover:bg-gray-50 cursor-pointer text-sm text-gray-700">
-                        <span className="flex-1">Color</span>
-                        <input
-                            type="color"
-                            className="w-4 h-4 p-0 border-0 rounded overflow-hidden"
-                            onChange={(e) => {
-                                onUpdateUser(contextMenu.userId, e.target.value)
-                                // Don't close immediately so they can see change? Or close?
-                                // Let's close for cleaner feel
-                                setContextMenu(null)
-                            }}
-                        />
-                    </label>
+                    <div className="flex items-center px-3 py-2 hover:bg-gray-50 text-sm text-gray-700 justify-between group">
+                        <span>Color</span>
+                        <div onClick={(e) => e.stopPropagation()}>
+                            <ColorPicker
+                                color={users.find(u => u.id === contextMenu.userId)?.color || '#000000'}
+                                onChange={(newColor) => {
+                                    onUpdateUser(contextMenu.userId, newColor)
+                                }}
+                            />
+                        </div>
+                    </div>
                     <button
                         className="text-left px-3 py-2 hover:bg-red-50 text-red-600 text-sm w-full"
                         onClick={() => {

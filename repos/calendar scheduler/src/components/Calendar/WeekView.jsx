@@ -1,4 +1,5 @@
 import { useMemo } from 'react'
+import { formatDateKey } from '../../utils/dateUtils'
 
 export function WeekView({ currentDate, bookingsMap, onDateClick, users, daysToShow = 7 }) {
     const days = useMemo(() => {
@@ -31,7 +32,7 @@ export function WeekView({ currentDate, bookingsMap, onDateClick, users, daysToS
         <div className="h-full overflow-x-auto">
             <div className={`h-full grid gap-2 md:gap-4 min-w-[800px] md:min-w-0 ${daysToShow === 7 ? 'grid-cols-7' : 'grid-cols-3'}`}>
                 {days.map((d, i) => {
-                    const dateStr = d.toISOString().split('T')[0]
+                    const dateStr = formatDateKey(d)
                     const bookedUserIds = bookingsMap[dateStr] || []
 
                     return (

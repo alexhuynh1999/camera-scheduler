@@ -32,7 +32,7 @@ export function LandingPage() {
                 name: eventName.trim(),
                 createdAt: new Date().toISOString(),
                 lastAccessedAt: new Date().toISOString(),
-                version: '1.3.0'
+                version: '1.4.0'
             })
             navigate(`/${code}`)
         } catch (e) {
