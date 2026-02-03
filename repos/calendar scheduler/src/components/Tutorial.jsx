@@ -60,6 +60,7 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
         {
             title: "Real-time Summary",
             description: "Scroll down to see which date can accomodate the most people.",
+            targetId: "summary-section",
             position: "right"
         },
         {

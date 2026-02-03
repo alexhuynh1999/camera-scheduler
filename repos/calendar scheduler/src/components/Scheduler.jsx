@@ -106,6 +106,16 @@ export function Scheduler() {
             setSidebarOpen(false)
         } else {
             setSidebarOpen(true)
+            // If it's the Real-time Summary step (index 3), scroll to the summary section
+            if (!isAddUserTour && step === 3) {
+                // Small timeout to allow sidebar transition/render
+                setTimeout(() => {
+                    const summaryEl = document.getElementById('summary-section')
+                    if (summaryEl) {
+                        summaryEl.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                    }
+                }, 300)
+            }
         }
     }
 
