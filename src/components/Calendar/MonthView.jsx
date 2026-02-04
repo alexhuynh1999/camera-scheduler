@@ -55,7 +55,7 @@ export function MonthView({ currentDate, bookings, bookingsMap, onDateClick, use
             {/* Weekday Headers */}
             <div className="grid grid-cols-7 mb-2">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(d => (
-                    <div key={d} className="text-center text-[10px] md:text-xs font-semibold text-gray-400 uppercase tracking-wider py-2">
+                    <div key={d} className="text-center text-[10px] md:text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider py-2">
                         <span className="md:hidden">{d.charAt(0)}</span>
                         <span className="hidden md:block">{d}</span>
                     </div>
@@ -74,11 +74,11 @@ export function MonthView({ currentDate, bookings, bookingsMap, onDateClick, use
                             onClick={() => onDateClick(dateStr)}
                             className={`
                             relative p-0.5 md:p-1 rounded-lg md:rounded-xl border transition-all cursor-pointer flex flex-col items-start justify-start overflow-hidden group
-                            ${dayObj.isCurrentMonth ? 'bg-white border-gray-100' : 'bg-gray-50 border-transparent text-gray-300'}
-                            ${isToday(dayObj.date) ? 'ring-2 ring-indigo-500 ring-offset-1 md:ring-offset-2 z-10' : 'hover:border-indigo-200 hover:shadow-md'}
+                            ${dayObj.isCurrentMonth ? 'bg-white dark:bg-[#1a1b26] border-gray-100 dark:border-[#2f334d]' : 'bg-gray-50 dark:bg-[#16161e] border-transparent text-gray-300 dark:text-gray-700'}
+                            ${isToday(dayObj.date) ? 'ring-2 ring-indigo-500 ring-offset-1 md:ring-offset-2 dark:ring-offset-[#1a1b26] z-10' : 'hover:border-indigo-200 dark:hover:border-indigo-800 hover:shadow-md'}
                         `}
                         >
-                            <span className={`text-[10px] md:text-sm font-semibold ml-1 mt-0.5 md:mt-1 ${isToday(dayObj.date) ? 'text-indigo-600' : 'text-gray-700'}`}>
+                            <span className={`text-[10px] md:text-sm font-semibold ml-1 mt-0.5 md:mt-1 ${isToday(dayObj.date) ? 'text-indigo-600 dark:text-indigo-400' : 'text-gray-700 dark:text-[#a9b1d6]'}`}>
                                 {dayObj.date.getDate()}
                             </span>
 

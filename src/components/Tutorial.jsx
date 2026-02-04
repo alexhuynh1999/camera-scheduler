@@ -239,21 +239,21 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
                         ...getBubblePosition(rect, currentStep.position, isMobile, padding, bubbleHeight)
                     }}
                 >
-                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-80 relative border-2 border-indigo-50 max-h-[80vh] overflow-y-auto no-scrollbar">
+                    <div className="bg-white dark:bg-[#1a1b26] rounded-2xl shadow-2xl p-6 w-80 relative border-2 border-indigo-50 dark:border-[#2f334d] max-h-[80vh] overflow-y-auto no-scrollbar">
                         <div className={`absolute border-8 border-transparent ${getArrowClass(currentStep.position, isMobile)}`} />
 
                         <div className="flex justify-between items-start mb-3">
-                            <span className="px-2 py-0.5 rounded bg-indigo-50 text-[9px] font-black text-indigo-500 uppercase tracking-widest">
+                            <span className="px-2 py-0.5 rounded bg-indigo-50 dark:bg-indigo-900/20 text-[9px] font-black text-indigo-500 dark:text-indigo-400 uppercase tracking-widest">
                                 {isAddUserTour ? `Guide Step ${step + 1}/${steps.length}` : (step === 0 ? "Introduction" : `Step ${step} of ${steps.length - 1}`)}
                             </span>
-                            <button onClick={() => onClose()} className="text-gray-300 hover:text-gray-500 transition-colors text-xl leading-none">&times;</button>
+                            <button onClick={() => onClose()} className="text-gray-300 dark:text-gray-600 hover:text-gray-500 dark:hover:text-gray-400 transition-colors text-xl leading-none">&times;</button>
                         </div>
 
-                        <h3 className="text-xl font-black text-gray-800 mb-2 leading-tight">
+                        <h3 className="text-xl font-black text-gray-800 dark:text-[#c0caf5] mb-2 leading-tight">
                             {currentStep.title}
                         </h3>
                         {/* ... content ... */}
-                        <div className="text-gray-500 text-sm mb-8 leading-relaxed">
+                        <div className="text-gray-500 dark:text-[#a9b1d6] text-sm mb-8 leading-relaxed">
                             {isAddUserTour ? currentStep.description : (
                                 step === 1 ? (
                                     <div className="space-y-4">
@@ -268,9 +268,9 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
                                                 setMainTourStep(1)
                                                 setOpen('add-user')
                                             }}
-                                            className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-indigo-50 text-indigo-600 font-bold rounded-xl hover:bg-indigo-100 transition-all border border-indigo-100 group shadow-sm text-xs"
+                                            className="w-full flex items-center justify-center gap-2 py-2 px-4 bg-indigo-50 dark:bg-indigo-900/10 text-indigo-600 dark:text-indigo-400 font-bold rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/20 transition-all border border-indigo-100 dark:border-indigo-800/50 group shadow-sm text-xs"
                                         >
-                                            <svg className="w-4 h-4 text-indigo-400 group-hover:text-indigo-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+                                            <svg className="w-4 h-4 text-indigo-400 dark:text-indigo-500 group-hover:text-indigo-600 dark:group-hover:text-indigo-300 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
                                             <span>How do I add a user?</span>
                                         </button>
                                     </div>
@@ -282,14 +282,14 @@ export function Tutorial({ isOpen, onClose, currentUser, users, setOpen, onStepC
                             {step > 0 && (
                                 <button
                                     onClick={handleBack}
-                                    className="px-4 py-2.5 rounded-xl border border-gray-100 text-gray-400 font-bold text-xs hover:bg-gray-50 transition-all"
+                                    className="px-4 py-2.5 rounded-xl border border-gray-100 dark:border-[#2f334d] text-gray-400 dark:text-gray-500 font-bold text-xs hover:bg-gray-50 dark:hover:bg-[#24283b] transition-all"
                                 >
                                     Back
                                 </button>
                             )}
                             <button
                                 onClick={handleNext}
-                                className="flex-1 bg-indigo-600 text-white font-bold py-2.5 rounded-xl text-xs shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:-translate-y-0.5 transition-all"
+                                className="flex-1 bg-indigo-600 dark:bg-indigo-500 text-white font-bold py-2.5 rounded-xl text-xs shadow-xl shadow-indigo-100 dark:shadow-none hover:bg-indigo-700 dark:hover:bg-indigo-600 hover:-translate-y-0.5 transition-all"
                             >
                                 {step === steps.length - 1 ? (isAddUserTour ? "Finish Guide" : "Got it!") : "Next Step"}
                             </button>
@@ -375,13 +375,13 @@ function getArrowClass(position, isMobile) {
 
     switch (position) {
         case 'right':
-            return "border-r-white -left-4 top-6"
+            return "border-r-white dark:border-r-[#1a1b26] -left-4 top-6"
         case 'left':
-            return "border-l-white -right-4 top-6"
+            return "border-l-white dark:border-l-[#1a1b26] -right-4 top-6"
         case 'bottom':
-            return "border-b-white -top-4 left-1/2 -ml-2"
+            return "border-b-white dark:border-b-[#1a1b26] -top-4 left-1/2 -ml-2"
         case 'top':
-            return "border-t-white -bottom-4 left-1/2 -ml-2"
+            return "border-t-white dark:border-t-[#1a1b26] -bottom-4 left-1/2 -ml-2"
         default:
             return ""
     }

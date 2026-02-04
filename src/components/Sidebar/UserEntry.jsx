@@ -64,8 +64,8 @@ function UserEntryWithParams() {
     return (
         <div className="space-y-6">
             {/* Current User Display */}
-            <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Active User</label>
+            <div className="bg-white dark:bg-[#1a1b26] p-4 rounded-xl border border-gray-100 dark:border-[#2f334d] shadow-sm">
+                <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-2">Active User</label>
                 <div className="flex items-center space-x-3">
                     <div
                         className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-inner"
@@ -74,10 +74,10 @@ function UserEntryWithParams() {
                         {users.find(u => u.id === currentUser)?.name[0].toUpperCase()}
                     </div>
                     <div>
-                        <div className="font-semibold text-gray-800">
+                        <div className="font-semibold text-gray-800 dark:text-[#c0caf5]">
                             {users.find(u => u.id === currentUser)?.name}
                         </div>
-                        <div className="text-xs text-gray-400">Ready to book</div>
+                        <div className="text-xs text-gray-400 dark:text-gray-500">Ready to book</div>
                     </div>
                 </div>
             </div>
@@ -95,8 +95,8 @@ function UserEntryWithParams() {
             </div>
 
             {/* Add New User */}
-            <form onSubmit={handleAdd} className="pt-4 border-t border-gray-100">
-                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider block mb-2">Create Profile</label>
+            <form onSubmit={handleAdd} className="pt-4 border-t border-gray-100 dark:border-[#2f334d]">
+                <label className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-2">Create Profile</label>
                 <div className="space-y-3">
                     <div>
                         <input
@@ -105,7 +105,7 @@ function UserEntryWithParams() {
                             value={name}
                             onChange={(e) => setName(e.target.value)}
                             placeholder="Enter name..."
-                            className="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder-gray-400"
+                            className="w-full px-3 py-2 bg-gray-50 dark:bg-[#24283b] border border-gray-200 dark:border-[#2f334d] rounded-lg text-sm text-gray-900 dark:text-[#a9b1d6] focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder-gray-400 dark:placeholder-gray-600"
                         />
                     </div>
                     <div className="flex space-x-2">
@@ -118,7 +118,7 @@ function UserEntryWithParams() {
                             id="add-user-submit-button"
                             type="submit"
                             disabled={!name.trim()}
-                            className="flex-1 bg-gray-900 text-white text-sm font-medium rounded-lg hover:bg-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex-1 bg-gray-900 dark:bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-black dark:hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             Add User
                         </button>
@@ -196,26 +196,26 @@ function CustomDropdown({ users, currentUser, onSelect, onUpdateUser, onDeleteUs
             <button
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-full bg-white border border-gray-200 text-gray-700 py-2 px-3 rounded-lg flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full bg-white dark:bg-[#1a1b26] border border-gray-200 dark:border-[#2f334d] text-gray-700 dark:text-[#a9b1d6] py-2 px-3 rounded-lg flex items-center justify-between focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
                 <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 rounded-full border border-gray-300" style={{ backgroundColor: selectedUser?.color }} />
+                    <div className="w-3 h-3 rounded-full border border-gray-300 dark:border-gray-700" style={{ backgroundColor: selectedUser?.color }} />
                     <span className="text-sm">{selectedUser?.name}</span>
                 </div>
                 <svg className={`fill-current h-4 w-4 text-gray-400 transform transition-transform ${isOpen ? 'rotate-180' : ''}`} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
             </button>
 
             {isOpen && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-100 rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
+                <div className="absolute z-10 w-full mt-1 bg-white dark:bg-[#1a1b26] border border-gray-100 dark:border-[#2f334d] rounded-lg shadow-xl max-h-60 overflow-hidden flex flex-col">
                     {/* Search Input */}
-                    <div className="p-2 border-b border-gray-100">
+                    <div className="p-2 border-b border-gray-100 dark:border-[#2f334d]">
                         <input
                             ref={inputRef}
                             type="text"
                             placeholder="Search users..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full px-2 py-1 text-sm bg-gray-50 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-full px-2 py-1 text-sm bg-gray-50 dark:bg-[#24283b] border border-gray-200 dark:border-[#2f334d] rounded text-gray-900 dark:text-[#a9b1d6] focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder-gray-400 dark:placeholder-gray-600"
                             onClick={(e) => e.stopPropagation()}
                         />
                     </div>
@@ -234,15 +234,15 @@ function CustomDropdown({ users, currentUser, onSelect, onUpdateUser, onDeleteUs
                                     onTouchStart={(e) => handleTouchStart(e, u.id)}
                                     onTouchEnd={handleTouchEnd}
                                     onTouchMove={handleTouchEnd} // Cancel on scroll/move
-                                    className={`w-full flex items-center space-x-2 px-4 py-2 text-sm hover:bg-gray-50 text-left cursor-pointer group relative ${currentUser === u.id ? 'bg-indigo-50 text-indigo-900 font-medium' : 'text-gray-700'}`}
+                                    className={`w-full flex items-center space-x-2 px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-[#24283b] text-left cursor-pointer group relative ${currentUser === u.id ? 'bg-indigo-50 dark:bg-indigo-900/20 text-indigo-900 dark:text-indigo-400 font-medium' : 'text-gray-700 dark:text-[#a9b1d6]'}`}
                                 >
-                                    <div className="w-3 h-3 rounded-full border border-gray-300" style={{ backgroundColor: u.color }} />
+                                    <div className="w-3 h-3 rounded-full border border-gray-300 dark:border-gray-700" style={{ backgroundColor: u.color }} />
                                     <span className="flex-1">{u.name}</span>
-                                    <span className="text-xs text-gray-300 opacity-0 group-hover:opacity-100 hidden md:inline">Right-click edit</span>
+                                    <span className="text-xs text-gray-300 dark:text-gray-600 opacity-0 group-hover:opacity-100 hidden md:inline">Right-click edit</span>
                                 </div>
                             ))
                         ) : (
-                            <div className="px-4 py-3 text-sm text-gray-400 text-center italic">No users found</div>
+                            <div className="px-4 py-3 text-sm text-gray-400 dark:text-gray-600 text-center italic">No users found</div>
                         )}
                     </div>
                 </div>
@@ -257,14 +257,14 @@ function CustomDropdown({ users, currentUser, onSelect, onUpdateUser, onDeleteUs
             {contextMenu && (
                 <div
                     ref={contextMenuRef}
-                    className="fixed z-50 bg-white border border-gray-200 shadow-xl rounded-lg py-1 w-48 flex flex-col"
+                    className="fixed z-50 bg-white dark:bg-[#1a1b26] border border-gray-200 dark:border-[#2f334d] shadow-xl rounded-lg py-1 w-48 flex flex-col"
                     style={{ top: contextMenu.y, left: contextMenu.x }}
                     onClick={(e) => e.stopPropagation()}
                 >
-                    <div className="px-3 py-2 border-b border-gray-100 text-xs text-gray-400 font-bold uppercase tracking-wider">
+                    <div className="px-3 py-2 border-b border-gray-100 dark:border-[#2f334d] text-xs text-gray-400 dark:text-gray-500 font-bold uppercase tracking-wider">
                         Options
                     </div>
-                    <div className="flex items-center px-3 py-2 hover:bg-gray-50 text-sm text-gray-700 justify-between group">
+                    <div className="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-[#24283b] text-sm text-gray-700 dark:text-[#a9b1d6] justify-between group">
                         <span>Color</span>
                         <div onClick={(e) => e.stopPropagation()}>
                             <ColorPicker
@@ -276,7 +276,7 @@ function CustomDropdown({ users, currentUser, onSelect, onUpdateUser, onDeleteUs
                         </div>
                     </div>
                     <button
-                        className="text-left px-3 py-2 hover:bg-red-50 text-red-600 text-sm w-full"
+                        className="text-left px-3 py-2 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 text-sm w-full transition-colors"
                         onClick={() => {
                             onDeleteUser(contextMenu.userId)
                             setContextMenu(null)

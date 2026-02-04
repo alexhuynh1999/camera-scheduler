@@ -1,13 +1,7 @@
 import { create } from 'zustand'
 import { db } from '../firebase'
-import {
-    collection,
-    onSnapshot,
-    doc,
-    setDoc,
-    deleteDoc,
-    updateDoc
-} from 'firebase/firestore'
+import { doc, getDoc, setDoc, deleteDoc, updateDoc } from 'firebase/firestore'
+import { APP_VERSION } from '../constants/config'
 
 export const useStore = create((set, get) => ({
     // Session State
@@ -20,6 +14,7 @@ export const useStore = create((set, get) => ({
     currentDate: new Date(),
     isSidebarOpen: true,
     isTutorialOpen: false,
+    theme: 'auto', // 'light' | 'dark' | 'auto'
     toast: null,
 
     // Actions
@@ -27,6 +22,7 @@ export const useStore = create((set, get) => ({
     setView: (view) => set({ view }),
     setSidebarOpen: (isOpen) => set({ isSidebarOpen: isOpen }),
     setTutorialOpen: (isOpen) => set({ isTutorialOpen: isOpen }),
+    setTheme: (theme) => set({ theme }),
     setCurrentUser: (userId) => set({ currentUser: userId }),
     setCurrentDate: (dateOrFn) => set(state => ({
         currentDate: typeof dateOrFn === 'function' ? dateOrFn(state.currentDate) : dateOrFn
@@ -122,7 +118,7 @@ export const useStore = create((set, get) => ({
                 name: eventName.trim(),
                 createdAt: new Date().toISOString(),
                 lastAccessedAt: new Date().toISOString(),
-                version: '1.5.1'
+                version: APP_VERSION
             })
             return code
         } catch (e) {

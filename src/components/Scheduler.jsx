@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { Sidebar } from './Sidebar/Sidebar'
 import { CalendarGrid } from './Calendar/CalendarGrid'
 import { Tutorial } from './Tutorial'
+import { APP_VERSION } from '../constants/config'
 import { db } from '../firebase'
 import { Toast } from './Common/Toast'
 import { useStore } from '../stores/useStore'
@@ -147,10 +148,10 @@ export function Scheduler() {
     }
 
     return (
-        <div className="flex flex-col h-screen bg-white text-gray-900 font-sans selection:bg-indigo-100 selection:text-indigo-900 overflow-hidden">
+        <div className="flex flex-col h-screen bg-white dark:bg-[#1a1b26] text-gray-900 dark:text-[#a9b1d6] font-sans selection:bg-indigo-100 dark:selection:bg-indigo-900 selection:text-indigo-900 dark:selection:text-indigo-100 overflow-hidden">
             <main className="flex-1 flex overflow-hidden relative">
                 {isSidebarOpen && (
-                    <div className="fixed inset-0 bg-black/5 md:hidden z-[45] backdrop-blur-[2px] animate-in fade-in duration-300" onClick={() => setSidebarOpen(false)} />
+                    <div className="fixed inset-0 bg-black/5 dark:bg-black/20 md:hidden z-[45] backdrop-blur-[2px] animate-in fade-in duration-300" onClick={() => setSidebarOpen(false)} />
                 )}
 
                 <Sidebar
@@ -160,42 +161,42 @@ export function Scheduler() {
                 />
 
                 <main className="flex-1 flex flex-col overflow-hidden">
-                    <header id="calendar-header" className="flex items-center justify-between px-4 md:px-8 py-5 bg-white border-b border-gray-200">
+                    <header id="calendar-header" className="flex items-center justify-between px-4 md:px-8 py-5 bg-white dark:bg-[#1a1b26] border-b border-gray-200 dark:border-[#2f334d]">
                         <div className="flex items-center space-x-4">
-                            <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-md">
+                            <button onClick={() => setSidebarOpen(true)} className="md:hidden p-2 -ml-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-[#24283b] rounded-md">
                                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" /></svg>
                             </button>
                             <div className="flex items-center space-x-1">
-                                <button onClick={() => navigateDate(-1)} className="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-indigo-600 transition-colors"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
-                                <button onClick={() => navigateDate(1)} className="p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-indigo-600 transition-colors"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
+                                <button onClick={() => navigateDate(-1)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-[#24283b] text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg></button>
+                                <button onClick={() => navigateDate(1)} className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-[#24283b] text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"><svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg></button>
                             </div>
-                            <h2 className="text-sm md:text-xl font-semibold min-w-32 md:min-w-48 text-center select-none truncate">{getHeaderTitle()}</h2>
+                            <h2 className="text-sm md:text-xl font-semibold min-w-32 md:min-w-48 text-center select-none truncate text-gray-900 dark:text-[#c0caf5]">{getHeaderTitle()}</h2>
                         </div>
-                        <div className="flex space-x-2 bg-gray-100 p-1 rounded-lg">
+                        <div className="flex space-x-2 bg-gray-100 dark:bg-[#24283b] p-1 rounded-lg">
                             <div className="md:hidden relative">
-                                <select value={view} onChange={(e) => setView(e.target.value)} className="appearance-none bg-white text-indigo-600 text-sm font-semibold py-1.5 pl-3 pr-8 rounded-md shadow-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                                <select value={view} onChange={(e) => setView(e.target.value)} className="appearance-none bg-white dark:bg-[#1a1b26] text-indigo-600 dark:text-indigo-400 text-sm font-semibold py-1.5 pl-3 pr-8 rounded-md shadow-sm border border-gray-200 dark:border-[#2f334d] focus:outline-none focus:ring-2 focus:ring-indigo-500">
                                     <option value="month">Month</option>
                                     <option value="week">Week</option>
                                     <option value="3day">3 Days</option>
                                 </select>
-                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-indigo-600">
+                                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-indigo-600 dark:text-indigo-400">
                                     <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg>
                                 </div>
                             </div>
                             <div className="hidden md:flex space-x-1">
                                 {[{ id: 'month', label: 'Month' }, { id: 'week', label: 'Week' }, { id: '3day', label: '3 Days' }].map((v) => (
-                                    <button key={v.id} onClick={() => setView(v.id)} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${view === v.id ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}>{v.label}</button>
+                                    <button key={v.id} onClick={() => setView(v.id)} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${view === v.id ? 'bg-white dark:bg-[#1a1b26] text-indigo-600 dark:text-indigo-400 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'}`}>{v.label}</button>
                                 ))}
                             </div>
                         </div>
                     </header>
-                    <div id="calendar-view" className="flex-1 min-h-0 overflow-hidden p-2 md:p-8 relative">
-                        <div id="calendar-grid-container" className="bg-white rounded-xl shadow-sm border border-gray-200 h-full p-3 md:p-6 overflow-auto">
+                    <div id="calendar-view" className="flex-1 min-h-0 overflow-hidden p-2 md:p-8 relative bg-gray-50 dark:bg-[#16161e]">
+                        <div id="calendar-grid-container" className="bg-white dark:bg-[#1a1b26] rounded-xl shadow-sm border border-gray-200 dark:border-[#2f334d] h-full p-3 md:p-6 overflow-auto">
                             <CalendarGrid />
                         </div>
                     </div>
-                    <footer className="py-2 text-center bg-gray-50 border-t border-gray-100">
-                        <span className="text-[9px] font-bold text-gray-300 tracking-widest uppercase">Version 1.5.1</span>
+                    <footer className="py-2 text-center bg-gray-50 dark:bg-[#1a1b26] border-t border-gray-100 dark:border-[#2f334d]">
+                        <span className="text-[9px] font-bold text-gray-300 dark:text-gray-600 tracking-widest uppercase">Version {APP_VERSION}</span>
                     </footer>
                 </main>
             </main>

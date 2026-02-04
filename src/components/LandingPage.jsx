@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Toast } from './Common/Toast'
+import { ThemeToggle } from './Common/ThemeToggle'
 import { useStore } from '../stores/useStore'
+import { APP_VERSION } from '../constants/config'
 
 export function LandingPage() {
     const navigate = useNavigate()
@@ -27,7 +29,7 @@ export function LandingPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-50 dark:bg-[#16161e] flex flex-col items-center justify-center p-4">
             {toast && (
                 <Toast
                     message={toast.message}
@@ -36,12 +38,15 @@ export function LandingPage() {
                 />
             )}
 
-            <div className="max-w-md w-full text-center space-y-8 bg-white p-10 rounded-2xl shadow-xl border border-gray-100 transition-all hover:shadow-2xl relative">
+            <div className="max-w-md w-full text-center space-y-8 bg-white dark:bg-[#1a1b26] p-10 rounded-2xl shadow-xl border border-gray-100 dark:border-[#2f334d] transition-all hover:shadow-2xl relative">
+                <div className="absolute top-4 right-4">
+                    <ThemeToggle />
+                </div>
                 <div className="space-y-2">
                     <h1 className="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
                         Scheduler
                     </h1>
-                    <p className="text-gray-500 font-medium">
+                    <p className="text-gray-500 dark:text-gray-400 font-medium">
                         Create a private schedule and invite others to help coordinate.
                     </p>
                 </div>
@@ -53,7 +58,7 @@ export function LandingPage() {
                             value={eventName}
                             onChange={(e) => setEventName(e.target.value)}
                             placeholder="What's this event for?"
-                            className="w-full px-4 py-4 bg-gray-50 border-2 border-gray-100 rounded-xl focus:bg-white focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none text-center font-bold text-gray-700 placeholder:text-gray-300 placeholder:font-medium"
+                            className="w-full px-4 py-4 bg-gray-50 dark:bg-[#24283b] border-2 border-gray-100 dark:border-[#2f334d] rounded-xl focus:bg-white dark:focus:bg-[#1a1b26] focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/10 transition-all outline-none text-center font-bold text-gray-700 dark:text-[#a9b1d6] placeholder:text-gray-300 dark:placeholder:text-gray-600 placeholder:font-medium"
                             required
                         />
                         <div className="absolute inset-0 rounded-xl border-2 border-transparent group-focus-within:border-indigo-500/20 pointer-events-none transition-all" />
@@ -84,10 +89,10 @@ export function LandingPage() {
                 </form>
 
                 <div className="flex flex-col items-center gap-3 pt-4">
-                    <div className="text-xs text-gray-400 font-medium">
+                    <div className="text-xs text-gray-400 dark:text-gray-500 font-medium">
                         No sign-up required. Just create and share the link.
                     </div>
-                    <span className="px-2 py-0.5 rounded-md bg-gray-50 text-[10px] font-bold text-gray-300 border border-gray-100">v1.5.1</span>
+                    <span className="px-2 py-0.5 rounded-md bg-gray-50 dark:bg-[#24283b] text-[10px] font-bold text-gray-300 dark:text-gray-600 border border-gray-100 dark:border-[#2f334d]">v{APP_VERSION}</span>
                 </div>
             </div>
         </div>

@@ -141,14 +141,14 @@ export function ColorPicker({ color, onChange, id }) {
                 id={id}
                 type="button"
                 onClick={() => setIsOpen(!isOpen)}
-                className="w-10 h-10 rounded-lg border border-gray-200 shadow-sm cursor-pointer hover:scale-105 transition-transform"
+                className="w-10 h-10 rounded-lg border border-gray-200 dark:border-[#2f334d] shadow-sm cursor-pointer hover:scale-105 transition-transform"
                 style={{ backgroundColor: color }}
                 aria-label="Pick color"
             />
 
             {/* Popover */}
             {isOpen && (
-                <div className="absolute z-50 mt-2 p-4 bg-white rounded-xl shadow-xl border border-gray-100 w-64 animate-in fade-in zoom-in-95 duration-200"
+                <div className="absolute z-50 mt-2 p-4 bg-white dark:bg-[#1a1b26] rounded-xl shadow-xl border border-gray-100 dark:border-[#2f334d] w-64 animate-in fade-in zoom-in-95 duration-200"
                     style={{ left: '0', top: '100%' }} // Simple positioning
                 >
                     {/* Presets */}
@@ -157,18 +157,18 @@ export function ColorPicker({ color, onChange, id }) {
                             <button
                                 key={c}
                                 type="button"
-                                className={`w-8 h-8 rounded-full border border-gray-100 hover:scale-110 transition-transform ${color.toLowerCase() === c.toLowerCase() ? 'ring-2 ring-offset-2 ring-gray-400' : ''}`}
+                                className={`w-8 h-8 rounded-full border border-gray-100 dark:border-[#2f334d] hover:scale-110 transition-transform ${color.toLowerCase() === c.toLowerCase() ? 'ring-2 ring-offset-2 ring-gray-400 dark:ring-gray-600' : ''}`}
                                 style={{ backgroundColor: c }}
                                 onClick={() => handlePresetClick(c)}
                             />
                         ))}
                     </div>
 
-                    <hr className="border-gray-100 my-4" />
+                    <hr className="border-gray-100 dark:border-[#2f334d] my-4" />
 
                     {/* Hex Input */}
                     <div className="mb-4">
-                        <div className="text-xs text-gray-500 mb-1">Hex Code</div>
+                        <div className="text-xs text-gray-500 dark:text-gray-400 mb-1">Hex Code</div>
                         <div className="relative">
                             <input
                                 type="text"
@@ -188,19 +188,19 @@ export function ColorPicker({ color, onChange, id }) {
                                         setHexInput(color);
                                     }
                                 }}
-                                className="w-full px-2 py-1 text-sm bg-gray-50 border border-gray-200 rounded focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
+                                className="w-full px-2 py-1 text-sm bg-gray-50 dark:bg-[#24283b] border border-gray-200 dark:border-[#2f334d] rounded text-gray-900 dark:text-[#a9b1d6] focus:outline-none focus:ring-1 focus:ring-indigo-500 font-mono"
                                 placeholder="#000000"
                             />
                         </div>
                     </div>
 
-                    <hr className="border-gray-100 my-4" />
+                    <hr className="border-gray-100 dark:border-[#2f334d] my-4" />
 
                     {/* HSL Sliders */}
                     <div className="space-y-3">
                         {/* Hue */}
                         <div>
-                            <div className="flex justify-between text-xs text-gray-500 mb-1">
+                            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
                                 <span>Hue</span>
                                 <span>{hsl.h}°</span>
                             </div>
@@ -219,7 +219,7 @@ export function ColorPicker({ color, onChange, id }) {
 
                         {/* Saturation */}
                         <div>
-                            <div className="flex justify-between text-xs text-gray-500 mb-1">
+                            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
                                 <span>Saturation</span>
                                 <span>{hsl.s}%</span>
                             </div>
@@ -238,7 +238,7 @@ export function ColorPicker({ color, onChange, id }) {
 
                         {/* Lightness */}
                         <div>
-                            <div className="flex justify-between text-xs text-gray-500 mb-1">
+                            <div className="flex justify-between text-xs text-gray-500 dark:text-gray-400 mb-1">
                                 <span>Lightness</span>
                                 <span>{hsl.l}%</span>
                             </div>

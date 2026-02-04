@@ -2,10 +2,34 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #1a1b26;
+    --card-bg: #ffffff;
+    --border-color: #f3f4f6;
+    --accent-indigo: #6366f1;
+  }
+
+  .dark {
+    --background: #1a1b26;
+    /* Storm */
+    --foreground: #a9b1d6;
+    --card-bg: #24283b;
+    --border-color: #2f334d;
+    --accent-indigo: #7aa2f7;
+  }
+
+  body {
+    @apply bg-[var(--background)] text-[var(--foreground)] transition-colors duration-300;
+  }
+}
+
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }
+
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
